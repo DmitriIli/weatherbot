@@ -10,9 +10,7 @@ dp = Dispatcher(bot)
 coord = None
 dictionary = None
 
-d = {1: {'name': 'Стрижи', 'lat': 58.4606789, 'lon': 49.284097, 'country': 'RU', 'state': 'Kirov Oblast'},
-     2: {'name': 'Киров', 'lat': 58.4606789, 'lon': 49.284097, 'country': 'RU', 'state': 'Kirov Oblast'},
-     3: {'name': 'Лёвинцы', 'lat': 58.4606789, 'lon': 49.284097, 'country': 'RU', 'state': 'Kirov Oblast'}}
+
 
 
 @dp.message_handler(commands='start')
@@ -40,11 +38,18 @@ async def add_keyboard(message: types.Message):
                          reply_markup=keyboard.make_keyboard(request.get_geolocation_by_city_name(message.text)))
 
 
-@dp.callback_query_handler(text='callback')
-async def callback_handlers(call: types.CallbackQuery):
-    # lat = callback_data['lat']
-    # lon = callback_data['lon']
-    await call.message.answer('message.text')
+@dp.callback_query_handler(keyboard.cb.filter())
+async def callbacks(call: types.CallbackQuery, callback_data: dict):
+    dictionary = {'name': callback_data["name"],
+                  'lat': callback_data["lat"],
+                  'lon': callback_data["lon"]}
+
+
+# @dp.callback_query_handler(text='callback')
+# async def callback_handlers(call: types.CallbackQuery):
+#     # lat = callback_data['lat']
+#     # lon = callback_data['lon']
+#     await call.message.answer('message.text')
 
 
 if __name__ == '__main__':
